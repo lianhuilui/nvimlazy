@@ -301,6 +301,9 @@ vim.o.scrolloff = 8
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
+vim.keymap.set('n', '<C-j>', ':cn<cr>')
+vim.keymap.set('n', '<C-k>', ':cp<cr>')
+
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
@@ -362,7 +365,7 @@ vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
-vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]resume' })
+vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
 
 -- Window navigation
 vim.keymap.set("n", "<leader>j", "<C-w>h", { desc = "Move Focus left" })
@@ -378,6 +381,9 @@ vim.keymap.set("n", "<leader>E", ":Neotree toggle<cr>", { desc = "Toggle File [E
 vim.keymap.set("n", "<leader>v", ":vnew<CR>", { desc = "New [V]ertical Pane" })
 vim.keymap.set("n", "<leader>h", "<C-w>n", { desc = "New [H]orizontal Pane" })
 
+vim.keymap.set("n", "<leader>V", ":vsplit<CR>", { desc = "[V]ertical Split" })
+vim.keymap.set("n", "<leader>H", ":split<CR>", { desc = "[H]orizontal Split" })
+
 -- write file
 vim.keymap.set("n", "<leader>w", vim.cmd.w, { desc = "[W]rite file" })
 
@@ -389,9 +395,11 @@ vim.keymap.set("n", "<leader>q", vim.cmd.q, { desc = "[Q]uit window" })
 
 -- exit insert mode
 vim.keymap.set("i", "jf", "<esc>")
+vim.keymap.set("i", "jj", "<CR>")
 
 -- exit insertmode and save file
 vim.keymap.set("i", "jw", "<esc>:w<CR>")
+vim.keymap.set("i", "jl", vim.cmd.w) -- write file without leaving insert mode
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
@@ -501,17 +509,17 @@ local on_attach = function(_, bufnr)
   nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
   nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
   nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-  nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+  nmap('<leader>Ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  nmap('<C-i>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-  nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-  nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-  nmap('<leader>wl', function()
+  nmap('<leader>Wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
+  nmap('<leader>Wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+  nmap('<leader>Wl', function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
 
@@ -519,6 +527,8 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
+
+  nmap('<leader>cf', vim.lsp.buf.format, "[C]ode [F]ormat")
 end
 
 -- Enable the following language servers
