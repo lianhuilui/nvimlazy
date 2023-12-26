@@ -408,7 +408,7 @@ require('nvim-treesitter.configs').setup {
   ensure_installed = { 'lua', 'python', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'svelte' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-  auto_install = false,
+  auto_install = true,
 
   highlight = { enable = true },
   indent = { enable = true },
