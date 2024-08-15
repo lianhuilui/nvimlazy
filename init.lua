@@ -20,6 +20,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+
 -- NOTE: Here is where you install your plugins.
 --  You can configure plugins using the `config` key.
 --
@@ -151,7 +152,14 @@ require('lazy').setup({
     -- See `:help indent_blankline.txt`
     opts = {},
     config = function()
-      require("ibl").setup()
+      require("ibl").setup({
+        indent = {
+          char = "║"
+        },
+        scope = {
+          enabled = false
+        }
+      })
     end
   },
 
@@ -263,8 +271,8 @@ vim.o.scrolloff = 8
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
-vim.keymap.set('n', '<C-j>', ':cn<cr>')
-vim.keymap.set('n', '<C-k>', ':cp<cr>')
+vim.keymap.set('n', '<C-j>', ':cn<cr>', { desc = 'Next in QuickFix List' })
+vim.keymap.set('n', '<C-k>', ':cp<cr>', { desc = 'Prev in QuickFix List' })
 
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
@@ -296,6 +304,11 @@ require('telescope').setup {
       },
     },
   },
+  extensions = {
+    recent_files = {
+      only_cwd = true
+    }
+  }
 }
 
 -- Enable telescope fzf native, if installed
@@ -304,7 +317,7 @@ pcall(require('telescope').load_extension, 'fzf')
 require('telescope').load_extension('recent_files')
 
 -- See `:help telescope.builtin`
-vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
+vim.keymap.set('n', '<leader>b', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
 vim.keymap.set('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
@@ -318,7 +331,7 @@ vim.api.nvim_set_keymap("n", "<Leader><Leader>",
   [[<cmd>lua require('telescope').extensions.recent_files.pick()<CR>]],
   { noremap = true, silent = true })
 
--- vim.keymap.set('n', '<leader>r', require('telescope.builtin').recent_files, { desc = '[?] Find recently opened files' })
+-- vim.keymap.set('n', '<leader><leader>', require('telescope.builtin').recent_files, { desc = '[?] Find recently opened files' })
 vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle, { desc = "Undo Tree Toggle" })
 
 vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
@@ -337,7 +350,7 @@ vim.keymap.set("n", "<leader>i", "<C-w>k", { desc = "Move Focus down" })
 
 vim.keymap.set("n", "<leader>f", ":Neotree reveal<cr>", { desc = "[F]ocus file in Neotree" })
 
-vim.keymap.set("n", "<leader>E", ":Neotree toggle<cr>", { desc = "Toggle File [E]xplorer" })
+vim.keymap.set("n", "<leader>e", ":Neotree toggle<cr>", { desc = "Toggle File [E]xplorer" })
 
 -- split windows
 vim.keymap.set("n", "<leader>v", ":vnew<CR>", { desc = "New [V]ertical Pane" })
@@ -367,7 +380,7 @@ vim.keymap.set("i", "jl", vim.cmd.w) -- write file without leaving insert mode
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'lua', 'python', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'svelte' },
+  ensure_installed = { 'lua', 'python', 'tsx', 'javascript', 'typescript', 'css', 'vimdoc', 'vim', 'svelte' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = true,
@@ -432,7 +445,7 @@ require('nvim-treesitter.configs').setup {
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
+vim.keymap.set('n', '<leader>E', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>Q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- Persistence.nvim configs
@@ -503,7 +516,7 @@ end
 --  define the property 'filetypes' to the map in question.
 local servers = {
   -- clangd = {},
-  -- gopls = {},
+  gopls = {},
   -- pyright = {},
   -- rust_analyzer = {},
   tsserver = {},
