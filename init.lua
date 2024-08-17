@@ -104,12 +104,20 @@ require('lazy').setup({
     },
   },
 
+  -- {
+  --   -- Theme inspired by Atom
+  --   'navarasu/onedark.nvim',
+  --   priority = 1000,
+  --   config = function()
+  --     vim.cmd.colorscheme 'onedark'
+  --   end,
+  -- },
+
   {
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
+    'bluz71/vim-nightfly-colors',
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'onedark'
+      vim.cmd.colorscheme 'nightfly'
     end,
   },
 
@@ -605,3 +613,5 @@ cmp.setup {
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-- vim.cmd.colorscheme('peachpuff')
