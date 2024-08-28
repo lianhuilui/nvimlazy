@@ -337,7 +337,7 @@ end, { desc = '[/] Fuzzily search in current buffer' })
 -- Map a shortcut to open the recent files picker.
 vim.api.nvim_set_keymap("n", "<Leader><Leader>",
   [[<cmd>lua require('telescope').extensions.recent_files.pick()<CR>]],
-  { noremap = true, silent = true })
+  { noremap = true, silent = true, desc = "Recent files" })
 
 -- vim.keymap.set('n', '<leader><leader>', require('telescope.builtin').recent_files, { desc = '[?] Find recently opened files' })
 vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle, { desc = "Undo Tree Toggle" })
@@ -496,7 +496,7 @@ local on_attach = function(_, bufnr)
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-i>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  -- nmap('<C-i>', vim.lsp.buf.signature_help, 'Signature Documentation') -- disabled C-i because it overrides jumps....
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
