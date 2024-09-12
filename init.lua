@@ -4,6 +4,9 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+-- don't put character taken with `x` into default register
+vim.keymap.set('n', 'x', '"_x')
+
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -118,6 +121,7 @@ require('lazy').setup({
     priority = 1000,
     config = function()
       vim.cmd.colorscheme 'nightfly'
+      vim.api.nvim_set_hl(0, "Normal", {}) -- delete background color (to allow transparent terminal)
     end,
   },
 
@@ -127,7 +131,7 @@ require('lazy').setup({
     -- See `:help lualine.txt`
     opts = {
       options = {
-        globalstatus = false,
+        globalstatus = true,
         icons_enabled = true,
         theme = 'onedark',
         component_separators = '|',
@@ -496,7 +500,7 @@ local on_attach = function(_, bufnr)
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-i>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  -- nmap('<C-i>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
