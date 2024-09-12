@@ -500,11 +500,7 @@ local on_attach = function(_, bufnr)
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-<<<<<<< HEAD
-  -- nmap('<C-i>', vim.lsp.buf.signature_help, 'Signature Documentation')
-=======
   -- nmap('<C-i>', vim.lsp.buf.signature_help, 'Signature Documentation') -- disabled C-i because it overrides jumps....
->>>>>>> cacd0b314f63993a1b28598cee0aea984c0d35c2
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
