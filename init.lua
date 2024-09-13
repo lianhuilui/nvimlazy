@@ -4,9 +4,6 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
--- don't put character taken with `x` into default register
-vim.keymap.set('n', 'x', '"_x')
-
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
