@@ -114,12 +114,21 @@ require('lazy').setup({
   -- },
 
   {
-    'bluz71/vim-nightfly-colors',
-    priority = 1000,
-    config = function()
-      vim.cmd.colorscheme 'nightfly'
-      vim.api.nvim_set_hl(0, "Normal", {}) -- delete background color (to allow transparent terminal)
-    end,
+    -- 'bluz71/vim-nightfly-colors',
+    -- priority = 1000,
+    -- config = function()
+    --   vim.cmd.colorscheme 'nightfly'
+    --   vim.api.nvim_set_hl(0, "Normal", {}) -- delete background color (to allow transparent terminal)
+    -- end,
+  },
+
+  {
+    "EdenEast/nightfox.nvim",
+    -- priority = 1000
+    -- config = function()
+      -- vim.cmd.colorscheme 'nightfox'
+      -- vim.api.nvim_set_hl(0, "Normal", {}) -- delete background color (to allow transparent terminal)
+    -- end,
   },
 
   {
@@ -128,9 +137,9 @@ require('lazy').setup({
     -- See `:help lualine.txt`
     opts = {
       options = {
-        globalstatus = true,
+        globalstatus = false,
         icons_enabled = true,
-        theme = 'onedark',
+        theme = 'nightfox',
         component_separators = '|',
         section_separators = '',
       },
@@ -140,10 +149,10 @@ require('lazy').setup({
         lualine_c = { { 'filename', path = 1 } },
         lualine_x = { 'encoding', 'fileformat', 'filetype' },
         lualine_y = { 'progress' },
-        lualine_z = { 'location' }
+        lualine_z = {}
       },
       inactive_sections = {
-        lualine_a = {},
+        lualine_a = { 'mode' },
         lualine_b = { 'branch', 'diff', 'diagnostics' },
         lualine_c = { 'filename' },
         lualine_x = { 'encoding', 'fileformat', 'filetype' },
@@ -480,10 +489,9 @@ local on_attach = function(_, bufnr)
   local nmap = function(keys, func, desc)
     if desc then
       desc = 'LSP: ' .. desc
-    end
-
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
+end
 
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
@@ -611,6 +619,25 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
+
+require('nightfox').setup({
+  -- options = {
+  --   -- styles = { strings = "italic" }
+  -- },
+  -- palettes = {
+  --   dayfox = {},
+  --   --nightfox = { green = "#00ff00" }
+  -- },
+  --
+  -- groups = {
+  --   all = {
+  --     -- ["@field"] = { fg = "palette.black" },
+  --     -- LineNr = { fg = "palette.black" }
+  --   }
+  -- }
+})
+
+vim.cmd.colorscheme('nightfox')
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
