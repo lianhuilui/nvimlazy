@@ -126,8 +126,8 @@ require('lazy').setup({
     "EdenEast/nightfox.nvim",
     -- priority = 1000
     -- config = function()
-      -- vim.cmd.colorscheme 'nightfox'
-      -- vim.api.nvim_set_hl(0, "Normal", {}) -- delete background color (to allow transparent terminal)
+    -- vim.cmd.colorscheme 'nightfox'
+    -- vim.api.nvim_set_hl(0, "Normal", {}) -- delete background color (to allow transparent terminal)
     -- end,
   },
 
@@ -315,10 +315,41 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- See `:help telescope` and `:help telescope.setup()`
 require('telescope').setup {
   defaults = {
+    preview = {
+      hide_on_startup = true
+    },
+    sorting_strategy = 'ascending',
+    layout_strategy = 'vertical',
+    layout_config = {
+      vertical = {
+        prompt_position = 'top'
+      }
+    },
     mappings = {
       i = {
         ['<C-u>'] = false,
         ['<C-d>'] = false,
+        ['<C-p>'] = require('telescope.actions.layout').toggle_preview,
+        -- ['<C-j>'] = require('telescope.actions.layout').cycle_layout_next,
+        ['<C-j>'] = {
+          require('telescope.actions').move_selection_next, type = 'action',
+          opts = { nowait = true, silent = true }
+        },
+        ['<C-k>'] = {
+          require('telescope.actions').move_selection_previous, type = 'action',
+          opts = { nowait = true, silent = true }
+        },
+      },
+      n = {
+        ['<C-p>'] = require('telescope.actions.layout').toggle_preview,
+        ['<C-j>'] = {
+          require('telescope.actions').move_selection_next, type = 'action',
+          opts = { nowait = true, silent = true }
+        },
+        ['<C-k>'] = {
+          require('telescope.actions').move_selection_previous, type = 'action',
+          opts = { nowait = true, silent = true }
+        },
       },
     },
   },
@@ -397,13 +428,18 @@ vim.keymap.set("i", "jl", vim.cmd.w) -- write file without leaving insert mode
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
+  -- to get rid of diagnostic warnings.. idk what the defaults are
+  modules = {},
+  sync_install = false,
+  ignore_install = {},
+
   -- Add languages to be installed here that you want installed for treesitter
   ensure_installed = { 'lua', 'python', 'tsx', 'javascript', 'typescript', 'css', 'vimdoc', 'vim', 'svelte' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = true,
 
-  highlight = { enable = true },
+  highlight = { enable = false },
   indent = { enable = true },
   incremental_selection = {
     enable = true,
@@ -489,9 +525,9 @@ local on_attach = function(_, bufnr)
   local nmap = function(keys, func, desc)
     if desc then
       desc = 'LSP: ' .. desc
-    vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+      vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+    end
   end
-end
 
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
