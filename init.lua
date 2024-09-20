@@ -124,12 +124,21 @@ require('lazy').setup({
 
   {
     "EdenEast/nightfox.nvim",
-    -- priority = 1000
-    -- config = function()
-    -- vim.cmd.colorscheme 'nightfox'
-    -- vim.api.nvim_set_hl(0, "Normal", {}) -- delete background color (to allow transparent terminal)
-    -- end,
+    priority = 1000,
+    config = function()
+      vim.cmd.colorscheme 'carbonfox'
+      -- vim.api.nvim_set_hl(0, "Normal", {}) -- delete background color (to allow transparent terminal)
+    end,
   },
+
+  -- {
+  --   "EdenEast/nightfox.nvim",
+  --   -- priority = 1000
+  --   -- config = function()
+  --   -- vim.cmd.colorscheme 'nightfox'
+  --   -- vim.api.nvim_set_hl(0, "Normal", {}) -- delete background color (to allow transparent terminal)
+  --   -- end,
+  -- },
 
   {
     -- Set lualine as statusline
@@ -327,10 +336,11 @@ require('telescope').setup {
     },
     mappings = {
       i = {
+        ['jf'] = 'close',
+        ['jj'] = 'file_edit',
         ['<C-u>'] = false,
         ['<C-d>'] = false,
         ['<C-p>'] = require('telescope.actions.layout').toggle_preview,
-        -- ['<C-j>'] = require('telescope.actions.layout').cycle_layout_next,
         ['<C-j>'] = {
           require('telescope.actions').move_selection_next, type = 'action',
           opts = { nowait = true, silent = true }
@@ -656,7 +666,7 @@ cmp.setup {
   },
 }
 
-require('nightfox').setup({
+-- require('nightfox').setup({
   -- options = {
   --   -- styles = { strings = "italic" }
   -- },
@@ -671,9 +681,9 @@ require('nightfox').setup({
   --     -- LineNr = { fg = "palette.black" }
   --   }
   -- }
-})
+-- })
 
-vim.cmd.colorscheme('nightfox')
+-- vim.cmd.colorscheme('nightfox')
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
