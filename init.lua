@@ -211,6 +211,12 @@ require('lazy').setup({
           return vim.fn.executable 'make' == 1
         end,
       },
+      {
+        "nvim-telescope/telescope-live-grep-args.nvim",
+        -- This will not install any breaking changes.
+        -- For major updates, this must be adjusted manually.
+        version = "^1.0.0",
+      },
     },
   },
 
@@ -366,7 +372,14 @@ require('telescope').setup {
   extensions = {
     recent_files = {
       only_cwd = true
-    }
+    },
+    live_grep_args = {
+      mappings = {
+        i = {
+          ["  "] = require("telescope-live-grep-args.actions").quote_prompt({ postfix = " --iglob *" }),
+        }
+      }
+    },
   }
 }
 
@@ -374,6 +387,8 @@ require('telescope').setup {
 pcall(require('telescope').load_extension, 'fzf')
 
 require('telescope').load_extension('recent_files')
+
+require('telescope').load_extension("live_grep_args")
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>b', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
@@ -386,8 +401,12 @@ vim.keymap.set('n', '<leader>/', function()
 end, { desc = '[/] Fuzzily search in current buffer' })
 
 -- Map a shortcut to open the recent files picker.
-vim.api.nvim_set_keymap("n", "<Leader><Leader>",
-  [[<cmd>lua require('telescope').extensions.recent_files.pick()<CR>]],
+-- vim.api.nvim_set_keymap("n", "<Leader><Leader>",
+--   [[<cmd>lua require('telescope').extensions.recent_files.pick()<CR>]],
+--   { noremap = true, silent = true, desc = "Recent files" })
+
+vim.keymap.set("n", "<Leader><Leader>",
+  require('telescope').extensions.recent_files.pick,
   { noremap = true, silent = true, desc = "Recent files" })
 
 -- vim.keymap.set('n', '<leader><leader>', require('telescope.builtin').recent_files, { desc = '[?] Find recently opened files' })
@@ -397,9 +416,16 @@ vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
-vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
-vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
-vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
+
+--vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
+vim.keymap.set("n", "<leader>sg", require('telescope').extensions.live_grep_args.live_grep_args, { desc = '[S]earch by [Grep] (args)'}) -- use the more powerful one
+
+vim.keymap.set('n', '<leader>gd', require('telescope.builtin').diagnostics, { desc = '[G]rep [D]iagnostics' })
+vim.keymap.set('n', '<leader>gg', require('telescope.builtin').resume, { desc = '[G]rep [G]o back' })
+
+vim.keymap.set('n', '<leader>gp', require('telescope.builtin').builtin, { desc = '[G]rep command [P]allette' })
+
+
 
 -- Window navigation
 vim.keymap.set("n", "<leader>j", "<C-w>h", { desc = "Move Focus left" })
@@ -667,20 +693,20 @@ cmp.setup {
 }
 
 -- require('nightfox').setup({
-  -- options = {
-  --   -- styles = { strings = "italic" }
-  -- },
-  -- palettes = {
-  --   dayfox = {},
-  --   --nightfox = { green = "#00ff00" }
-  -- },
-  --
-  -- groups = {
-  --   all = {
-  --     -- ["@field"] = { fg = "palette.black" },
-  --     -- LineNr = { fg = "palette.black" }
-  --   }
-  -- }
+-- options = {
+--   -- styles = { strings = "italic" }
+-- },
+-- palettes = {
+--   dayfox = {},
+--   --nightfox = { green = "#00ff00" }
+-- },
+--
+-- groups = {
+--   all = {
+--     -- ["@field"] = { fg = "palette.black" },
+--     -- LineNr = { fg = "palette.black" }
+--   }
+-- }
 -- })
 
 -- vim.cmd.colorscheme('nightfox')
