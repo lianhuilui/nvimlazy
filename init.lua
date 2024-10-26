@@ -471,12 +471,15 @@ require('nvim-treesitter.configs').setup {
   ignore_install = {},
 
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'lua', 'python', 'tsx', 'javascript', 'typescript', 'css', 'vimdoc', 'vim', 'svelte' },
+  ensure_installed = { 'lua', 'python', 'tsx', 'javascript', 'typescript', 'css', 'vimdoc', 'svelte', 'c' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = true,
 
-  highlight = { enable = false },
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = false,
+  },
   indent = { enable = true },
   incremental_selection = {
     enable = true,
@@ -716,3 +719,33 @@ cmp.setup {
 -- vim: ts=2 sts=2 sw=2 et
 
 -- vim.cmd.colorscheme('peachpuff')
+
+-- THIS PART IS TRYING TO WRITE CUSTOM LSP
+-- local client = vim.lsp.start_client {
+--   name = "mylsp",
+--   cmd = {
+--     "npx", "ts-node", vim.fn.expand("~/Work/lsp/server/src/server.ts")
+--   },
+--   capabilities = vim.lsp.protocol.make_client_capabilities()
+-- }
+--
+-- if not client then
+--   vim.notify("nope my lsp could not start")
+-- end
+--
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "help",
+--   callback = function()
+--     vim.lsp.buf_attach_client(0, client)
+--   end,
+-- })
+
+-- THIS PART IS TRYING TO WRITE CUSTOM TREE SITTER STUFF
+local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
+parser_configs["htl"] = {
+  install_info = {
+    url = "~/Work/tree-sitter-htl",
+    files = { "src/parser.c" }
+  },
+  filetype = "htl"
+}
