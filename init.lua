@@ -418,7 +418,8 @@ vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 
 --vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
-vim.keymap.set("n", "<leader>sg", require('telescope').extensions.live_grep_args.live_grep_args, { desc = '[S]earch by [Grep] (args)'}) -- use the more powerful one
+vim.keymap.set("n", "<leader>sg", require('telescope').extensions.live_grep_args.live_grep_args,
+  { desc = '[S]earch by [Grep] (args)' }) -- use the more powerful one
 
 vim.keymap.set('n', '<leader>gd', require('telescope.builtin').diagnostics, { desc = '[G]rep [D]iagnostics' })
 vim.keymap.set('n', '<leader>gg', require('telescope.builtin').resume, { desc = '[G]rep [G]o back' })
