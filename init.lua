@@ -721,24 +721,24 @@ cmp.setup {
 -- vim.cmd.colorscheme('peachpuff')
 
 -- THIS PART IS TRYING TO WRITE CUSTOM LSP
--- local client = vim.lsp.start_client {
---   name = "mylsp",
---   cmd = {
---     "npx", "ts-node", vim.fn.expand("~/Work/lsp/server/src/server.ts")
---   },
---   capabilities = vim.lsp.protocol.make_client_capabilities()
--- }
---
--- if not client then
---   vim.notify("nope my lsp could not start")
--- end
---
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = "help",
---   callback = function()
---     vim.lsp.buf_attach_client(0, client)
---   end,
--- })
+local client = vim.lsp.start_client {
+  name = "mylsp",
+  cmd = {
+    "npx", "ts-node", vim.fn.expand("~/Work/lsp/server/src/server.ts")
+  },
+  capabilities = vim.lsp.protocol.make_client_capabilities()
+}
+
+if not client then
+  vim.notify("nope my lsp could not start")
+end
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "text",
+  callback = function()
+    vim.lsp.buf_attach_client(0, client)
+  end,
+})
 
 -- THIS PART IS TRYING TO WRITE CUSTOM TREE SITTER STUFF
 local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
@@ -749,3 +749,29 @@ parser_configs["htl"] = {
   },
   filetype = "htl"
 }
+
+-- configure nvim terminal
+vim.api.nvim_create_autocmd('TermOpen', {
+  group = vim.api.nvim_create_augroup("custom-term-open", {clear = true }),
+  callback = function()
+    vim.opt.number = false
+    vim.opt.relativenumber = false
+  end,
+})
+
+-- key to open my own little nvim terminal 
+local jobid
+vim.keymap.set("n", "<leader>t", function ()
+  vim.cmd.new()
+  vim.cmd.term()
+  vim.api.nvim_win_set_height(0, 10)
+  jobid = vim.bo.channel
+end)
+
+-- remap esc in terminal to behave like esc in normal vim
+vim.keymap.set("t", "<esc>", "<c-\\><c-n>")
+
+-- key to run python main.py inside that little terminal
+vim.keymap.set("n", "<leader>rp", function()
+  vim.fn.chansend(jobid, { "python3 main.py\r\n" })
+end)
