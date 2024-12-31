@@ -752,16 +752,16 @@ parser_configs["htl"] = {
 
 -- configure nvim terminal
 vim.api.nvim_create_autocmd('TermOpen', {
-  group = vim.api.nvim_create_augroup("custom-term-open", {clear = true }),
+  group = vim.api.nvim_create_augroup("custom-term-open", { clear = true }),
   callback = function()
     vim.opt.number = false
     vim.opt.relativenumber = false
   end,
 })
 
--- key to open my own little nvim terminal 
+-- key to open my own little nvim terminal
 local jobid
-vim.keymap.set("n", "<leader>t", function ()
+vim.keymap.set("n", "<leader>t", function()
   vim.cmd.new()
   vim.cmd.term()
   vim.api.nvim_win_set_height(0, 10)
@@ -771,7 +771,24 @@ end)
 -- remap esc in terminal to behave like esc in normal vim
 vim.keymap.set("t", "<esc>", "<c-\\><c-n>")
 
+
+local runjobinterm = function(thecmd)
+  if jobid ~= nil then
+    vim.fn.chansend(jobid, { thecmd .. "\r" })
+  else
+    print("jobid is nil" .. jobid)
+  end
+end
+
 -- key to run python main.py inside that little terminal
-vim.keymap.set("n", "<leader>rp", function()
-  vim.fn.chansend(jobid, { "python3 main.py\r\n" })
+vim.keymap.set("n", "<leader>xp", function()
+  runjobinterm("python3 main.py")
+end)
+
+vim.keymap.set("n", "<leader>xj", function()
+  runjobinterm("node main.js")
+end)
+
+vim.keymap.set("n", "<leader>xm", function()
+  runjobinterm("yarn --cwd src/ClientSide dev")
 end)
