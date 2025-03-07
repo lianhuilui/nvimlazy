@@ -122,14 +122,25 @@ require('lazy').setup({
     -- end,
   },
 
+  -- {
+  --   "EdenEast/nightfox.nvim",
+  --   priority = 1000,
+  --   config = function()
+  --     vim.cmd.colorscheme 'carbonfox'
+  --     -- vim.api.nvim_set_hl(0, "Normal", {}) -- delete background color (to allow transparent terminal)
+  --   end,
+  -- },
+
   {
-    "EdenEast/nightfox.nvim",
+    "folke/tokyonight.nvim",
+    lazy = false,
     priority = 1000,
+    opts = {},
     config = function()
-      vim.cmd.colorscheme 'carbonfox'
-      -- vim.api.nvim_set_hl(0, "Normal", {}) -- delete background color (to allow transparent terminal)
-    end,
+      vim.cmd.colorscheme 'tokyonight-night'
+    end
   },
+
 
   -- {
   --   "EdenEast/nightfox.nvim",
@@ -148,7 +159,7 @@ require('lazy').setup({
       options = {
         globalstatus = false,
         icons_enabled = true,
-        theme = 'nightfox',
+        theme = 'tokyonight',
         component_separators = '|',
         section_separators = '',
       },
