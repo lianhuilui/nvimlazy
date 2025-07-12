@@ -52,24 +52,41 @@ return {
                 },
             }
         },
-        git = { enabled = true },
+
+        gitbrowse = { enabled = true },
+
+        -- this plugin shows colors only for area where the cursor is, and grayscales the rest
+        dim = { enabled = false },
+
+        -- shows the vertical lines to show scope
         indent = { enabled = true },
+
         input = { enabled = true },
+
+        -- important plugin used to grep and pick many things
+        --
         picker = { enabled = true },
-        notifier = { enabled = false },
+
+        notifier = { enabled = true },
+
         quickfile = { enabled = true },
+
         scroll = { enabled = false },
+
         statuscolumn = { enabled = true },
+
         -- explorer = { enabled = true },
         toggle = { enabled = true },
         words = { enabled = true },
+        win = { enabled = true, wo = { signcolumn = 'yes' } },
         zen = {
             enabled = true,
             -- Configuration for zen mode
             toggles = {
+                indent = false,
                 dim = false,
-                git_signs = false,
-                mini_diff_signs = false,
+                -- mini_diff_signs = false,
+                -- signcolumn = false,
                 -- diagnostics = false,
                 -- inlay_hints = false,
             },
@@ -78,21 +95,28 @@ return {
                 tabline = false,    -- hide tabline
             },
             win = {
-                backdrop = { transparent = false, blend = 40 },
-                width = 0.8, -- width of zen window (0.0 to 1.0)
-                options = {
-                    signcolumn = "no",
-                    number = false,
-                    relativenumber = false,
-                    cursorline = false,
-                    cursorcolumn = false,
-                    foldcolumn = "0",
-                    list = false,
-                },
+                style = "zen",
+                width = 140,
+                backdrop = { transparent = false },
             },
+
+            -- win = {
+            --     backdrop = { transparent = false, blend = 40 },
+            --     width = 138, -- width of zen window (0.0 to 1.0)
+            --     options = {
+            --         signcolumn = "yes",
+            --         statuscolumn = false,
+            --         number = false,
+            --         relativenumber = false,
+            --         cursorline = false,
+            --         cursorcolumn = false,
+            --         foldcolumn = "0",
+            --         list = false,
+            --     },
+            -- },
             -- plugins to disable when zen mode is active
             plugins = {
-                gitsigns = { enabled = false },
+                -- gitsigns = { enabled = false },
                 tmux = { enabled = false },
                 kitty = { enabled = false },
             },
@@ -102,7 +126,7 @@ return {
         -- zen
         { "<leader>z",  function() Snacks.zen() end,                    desc = "Toggle Zen Mode" },
         { "<leader>.",  function() Snacks.scratch() end,                desc = "Toggle Scratch" },
-        -- others
+        { "<leader>S",  function() Snacks.scratch.select() end,         desc = "Select Scratch Buffer" },
         -- search
         { '<leader>s"', function() Snacks.picker.registers() end,       desc = "Registers" },
         { '<leader>s/', function() Snacks.picker.search_history() end,  desc = "Search History" },
@@ -112,10 +136,46 @@ return {
         { "<leader>sC", function() Snacks.picker.commands() end,        desc = "Commands" },
         { "<leader>sd", function() Snacks.picker.diagnostics() end,     desc = "Diagnostics" },
         { "<leader>sm", function() Snacks.picker.marks() end,           desc = "Marks" },
+        { "<leader>sk", function() Snacks.picker.keymaps() end,         desc = "Key maps" },
         { "<leader>G",  function() Snacks.picker.grep() end,            desc = "Grep" },
         { "<leader>t",  function() Snacks.terminal() end,               desc = "Toggle Terminal" },
         -- { "<c-_>",      function() Snacks.terminal() end,               desc = "which_key_ignore" },
         -- explorer
         { "<leader>e",  function() Snacks.explorer() end,               desc = "File Explorer" },
+
     },
+
+    init = function()
+        vim.api.nvim_create_autocmd("User", {
+            callback = function()
+                -- Setup some globals for debugging (lazy-loaded)
+                _G.dd = function(...)
+                    Snacks.debug.inspect(...)
+                end
+                _G.bt = function()
+                    Snacks.debug.backtrace()
+                end
+                vim.print = _G.dd -- Override print to use snacks for `:=` command
+
+                -- Create some toggle mappings
+                Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
+                Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
+                Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
+                Snacks.toggle.diagnostics():map("<leader>ud")
+                Snacks.toggle.line_number():map("<leader>ul")
+                Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
+                    :map("<leader>uc")
+                Snacks.toggle.treesitter():map("<leader>uT")
+                Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map(
+                    "<leader>ub")
+                Snacks.toggle.inlay_hints():map("<leader>uh")
+                Snacks.toggle.indent():map("<leader>ui")
+
+                -- f for focus mode
+                Snacks.toggle.dim():map("<leader>uf")
+                Snacks.toggle.option("signcolumn", { on = "yes", off = "no", name = "Sign Column" }):map("<leader>uS")
+            end,
+            pattern = "VeryLazy",
+        })
+    end,
 }

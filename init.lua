@@ -202,22 +202,22 @@ require('lazy').setup({
   },
 
   {
-    -- Add indentation guides even on blank lines
-    'lukas-reineke/indent-blankline.nvim',
-    main = "ibl",
-    -- Enable `lukas-reineke/indent-blankline.nvim`
-    -- See `:help indent_blankline.txt`
-    opts = {},
-    config = function()
-      require("ibl").setup({
-        indent = {
-          char = "║"
-        },
-        scope = {
-          enabled = false
-        }
-      })
-    end
+    -- -- Add indentation guides even on blank lines
+    -- 'lukas-reineke/indent-blankline.nvim',
+    -- main = "ibl",
+    -- -- Enable `lukas-reineke/indent-blankline.nvim`
+    -- -- See `:help indent_blankline.txt`
+    -- opts = {},
+    -- config = function()
+    --   require("ibl").setup({
+    --     indent = {
+    --       char = "║"
+    --     },
+    --     scope = {
+    --       enabled = false
+    --     }
+    --   })
+    -- end
   },
 
   -- "gc" to comment visual regions/lines
@@ -296,8 +296,6 @@ vim.o.undofile = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
 
--- Keep signcolumn on by default
-vim.o.signcolumn = 'yes'
 
 -- Decrease update time
 vim.o.updatetime = 250
@@ -324,7 +322,9 @@ vim.o.undofile = true
 vim.o.incsearch = true
 vim.o.hlsearch = false
 vim.o.termguicolors = true
-vim.o.signcolumn = "yes"
+
+-- Keep signcolumn on by default
+vim.o.signcolumn = 'yes'
 
 vim.o.scrolloff = 8
 
@@ -440,7 +440,7 @@ vim.keymap.set("n", "<Leader><Leader>",
   { noremap = true, silent = true, desc = "Recent files" })
 
 -- vim.keymap.set('n', '<leader><leader>', require('telescope.builtin').recent_files, { desc = '[?] Find recently opened files' })
-vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle, { desc = "Undo Tree Toggle" })
+vim.keymap.set("n", "<leader>U", vim.cmd.UndotreeToggle, { desc = "Undo Tree Toggle" })
 
 vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
@@ -464,8 +464,7 @@ vim.keymap.set("n", "<leader>l", "<C-w>l", { desc = "Move Focus right" })
 vim.keymap.set("n", "<leader>k", "<C-w>j", { desc = "Move Focus up" })
 vim.keymap.set("n", "<leader>i", "<C-w>k", { desc = "Move Focus down" })
 
-vim.keymap.set("n", "<leader>f", ":Neotree reveal<cr>", { desc = "[F]ocus file in Neotree" })
-
+-- vim.keymap.set("n", "<leader>f", ":Neotree reveal<cr>", { desc = "[F]ocus file in Neotree" })
 -- vim.keymap.set("n", "<leader>e", ":Neotree toggle<cr>", { desc = "Toggle File [E]xplorer" }) -- trying out Snacks.explorer 
 
 -- split windows
@@ -525,7 +524,10 @@ require('nvim-treesitter.configs').setup {
     enable = true,
     additional_vim_regex_highlighting = false,
   },
-  indent = { enable = true },
+
+  -- testing here
+  indent = { enable = false },
+
   incremental_selection = {
     enable = true,
     keymaps = {
