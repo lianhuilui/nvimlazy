@@ -31,31 +31,10 @@ require('lazy').setup({
 
   -- Git related plugins
   'tpope/vim-fugitive',
-  'tpope/vim-rhubarb',
+--  'tpope/vim-rhubarb',
 
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
-
-  {
-    'akinsho/toggleterm.nvim',
-    version = "*",
-    config = function()
-      require("toggleterm").setup({
-        open_mapping = [[<leader>t]],
-        direction = "float",
-        shade_terminals = true,
-        float_opts = {
-          border = "curved",
-        },
-        -- open_mapping handles both show/hide
-      })
-
-      -- Optional: explicit keymap to toggle terminal (show/hide) on <leader>t
-      vim.keymap.set('n', '<leader>t', function()
-        require("toggleterm").toggle()
-      end, { noremap = true, silent = true, desc = "Toggle floating terminal" })
-    end,
-  },
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
@@ -65,14 +44,33 @@ require('lazy').setup({
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
       { 'williamboman/mason.nvim', config = true },
-      'williamboman/mason-lspconfig.nvim',
+      {
+        'williamboman/mason-lspconfig.nvim',
+        requires = {
+          'neovim/nvim-lspconfig',
+          'williamboman/mason.nvim',
+        },
+        config = function()
+          local servers = {
+            -- clangd = {},
+            -- gopls = {},
+            -- pyright = {},
+            -- rust_analyzer = {},
+            ts_ls = {},
+            lua_ls = {},
+            html = { filetypes = { 'html', 'twig', 'hbs', 'ftlh' } },
+          }
+
+          require('mason').setup()
+          require('mason-lspconfig').setup({
+            ensure_installed = vim.tbl_keys(servers),
+          })
+        end,
+      },
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { 'j-hui/fidget.nvim',       tag = 'legacy', opts = {} },
-
-      -- Additional lua configuration, makes nvim stuff amazing!
-      'folke/neodev.nvim',
     },
   },
 
@@ -264,8 +262,8 @@ require('lazy').setup({
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
-  require 'kickstart.plugins.autoformat',
-  require 'kickstart.plugins.debug',
+  -- require 'kickstart.plugins.autoformat',
+  -- require 'kickstart.plugins.debug',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
@@ -468,7 +466,7 @@ vim.keymap.set("n", "<leader>i", "<C-w>k", { desc = "Move Focus down" })
 
 vim.keymap.set("n", "<leader>f", ":Neotree reveal<cr>", { desc = "[F]ocus file in Neotree" })
 
-vim.keymap.set("n", "<leader>e", ":Neotree toggle<cr>", { desc = "Toggle File [E]xplorer" })
+-- vim.keymap.set("n", "<leader>e", ":Neotree toggle<cr>", { desc = "Toggle File [E]xplorer" }) -- trying out Snacks.explorer 
 
 -- split windows
 vim.keymap.set("n", "<leader>v", ":vnew<CR>", { desc = "New [V]ertical Pane" })
@@ -493,6 +491,21 @@ vim.keymap.set("i", "jj", "<CR>")
 -- exit insertmode and save file
 vim.keymap.set("i", "jw", "<esc>:w<CR>")
 vim.keymap.set("i", "jl", vim.cmd.w) -- write file without leaving insert mode
+
+-- Global formatting keymaps (safer version)
+vim.keymap.set("n", "<leader>==", function()
+  local clients = vim.lsp.get_clients({ bufnr = 0 })
+  if #clients > 0 then
+    vim.lsp.buf.format()
+  end
+end, { desc = "Format entire buffer" })
+
+vim.keymap.set("v", "<leader>==", function()
+  local clients = vim.lsp.get_clients({ bufnr = 0 })
+  if #clients > 0 then
+    vim.lsp.buf.format({ range = true })
+  end
+end, { desc = "Format selection" })
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
@@ -571,7 +584,7 @@ require('nvim-treesitter.configs').setup {
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
-vim.keymap.set('n', '<leader>E', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
+vim.keymap.set('n', '<leader>D', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>Q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- [[ Configure LSP ]]
@@ -617,57 +630,28 @@ local on_attach = function(_, bufnr)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
 
-  nmap('<leader>cf', vim.lsp.buf.format, "[C]ode [F]ormat")
+  -- Enhanced formatting keymaps with error handling
+  nmap('<leader>cf', function()
+    pcall(vim.lsp.buf.format)
+  end, "[C]ode [F]ormat")
+
+  -- Format selected text in visual mode
+  vim.keymap.set('v', '<leader>cf', function()
+    pcall(vim.lsp.buf.format, { range = true })
+  end, { buffer = bufnr, desc = '[C]ode [F]ormat selection' })
+
+  -- Alternative format keybindings
+  nmap('<leader>F', function()
+    pcall(vim.lsp.buf.format)
+  end, "[F]ormat buffer")
+  vim.keymap.set('v', '<leader>F', function()
+    pcall(vim.lsp.buf.format, { range = true })
+  end, { buffer = bufnr, desc = '[F]ormat selection' })
 end
-
--- Enable the following language servers
---  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
---
---  Add any additional override configuration in the following tables. They will be passed to
---  the `settings` field of the server config. You must look up that documentation yourself.
---
---  If you want to override the default filetypes that your language server will attach to you can
---  define the property 'filetypes' to the map in question.
-local servers = {
-  -- clangd = {},
-  -- gopls = {},
-  -- pyright = {},
-  -- rust_analyzer = {},
-  tsserver = {},
-  html = { filetypes = { 'html', 'twig', 'hbs' } },
-
-  -- lua_ls = {
-  --   Lua = {
-  --     workspace = { checkThirdParty = false },
-  --     telemetry = { enable = false },
-  --   },
-  -- },
-}
-
--- Setup neovim lua configuration
-require('neodev').setup()
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
--- -- Ensure the servers above are installed
--- local mason_lspconfig = require 'mason-lspconfig'
---
--- mason_lspconfig.setup {
---   ensure_installed = vim.tbl_keys(servers),
--- }
---
--- mason_lspconfig.setup_handlers {
---   function(server_name)
---     require('lspconfig')[server_name].setup {
---       capabilities = capabilities,
---       on_attach = on_attach,
---       settings = servers[server_name],
---       filetypes = (servers[server_name] or {}).filetypes,
---     }
---   end
--- }
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
