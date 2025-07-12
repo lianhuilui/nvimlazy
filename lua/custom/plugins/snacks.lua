@@ -36,9 +36,23 @@ return {
         -- or leave it empty to use the default settings
         -- refer to the configuration section below
         bigfile = { enabled = true },
-        dashboard = { enabled = true, preset = {
-            header = get_header()
-        } },
+        dashboard = { 
+            enabled = true, 
+            preset = {
+                header = get_header(),
+                -- Custom actions without restore session
+                keys = {
+                    { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+                    { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+                    { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+                    { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+                    { icon = " ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
+                    { icon = " ", key = "s", desc = "Git Status", action = ":lua Snacks.lazygit()" },
+                    { icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy" },
+                    { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+                },
+            }
+        },
         indent = { enabled = true },
         input = { enabled = true },
         picker = { enabled = true },
