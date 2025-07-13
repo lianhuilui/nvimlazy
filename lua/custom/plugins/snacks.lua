@@ -57,6 +57,8 @@ return {
 
         gitbrowse = { enabled = true },
 
+        explorer = { enabled = true },
+
         -- this plugin shows colors only for area where the cursor is, and grayscales the rest
         dim = { enabled = false },
 
