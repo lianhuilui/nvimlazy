@@ -155,6 +155,9 @@ return {
         --{ "<leader><space>", function() Snacks.picker.recent({filter = {cwd = true}}) end,          desc = "Recent Files" },
         { "<leader><space>", function() Snacks.picker.recent() end,          desc = "Recent Files" },
 
+        -- git browse
+        { "<leader>gB", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
+
 
         { "<leader>sf",      function() Snacks.picker.files() end,           desc = "Find files" },
         { "<leader>sF",      function() Snacks.picker.git_files() end,       desc = "Find files (only in git)" },
