@@ -435,23 +435,20 @@ end, { desc = '[/] Fuzzily search in current buffer' })
 --   [[<cmd>lua require('telescope').extensions.recent_files.pick()<CR>]],
 --   { noremap = true, silent = true, desc = "Recent files" })
 
-vim.keymap.set("n", "<Leader><Leader>",
-  require('telescope').extensions.recent_files.pick,
-  { noremap = true, silent = true, desc = "Recent files" })
+-- vim.keymap.set("n", "<Leader><Leader>", require('telescope').extensions.recent_files.pick, { noremap = true, silent = true, desc = "Recent files" }) -- replaced by snacks
 
 -- vim.keymap.set('n', '<leader><leader>', require('telescope.builtin').recent_files, { desc = '[?] Find recently opened files' })
 vim.keymap.set("n", "<leader>U", vim.cmd.UndotreeToggle, { desc = "Undo Tree Toggle" })
 
-vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
-vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
-vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
-vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
+-- vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
+-- vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
+-- vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
+-- vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' }) -- replaced with Snacks.picker.grep_word()
 
 --vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
-vim.keymap.set("n", "<leader>sg", require('telescope').extensions.live_grep_args.live_grep_args,
-  { desc = '[S]earch by [Grep] (args)' }) -- use the more powerful one
+-- vim.keymap.set("n", "<leader>sg", require('telescope').extensions.live_grep_args.live_grep_args, { desc = '[S]earch by [Grep] (args)' }) -- use the more powerful one
 
-vim.keymap.set('n', '<leader>gd', require('telescope.builtin').diagnostics, { desc = '[G]rep [D]iagnostics' })
+vim.keymap.set('n', '<leader>gD', require('telescope.builtin').diagnostics, { desc = '[G]rep [D]iagnostics' })
 vim.keymap.set('n', '<leader>gg', require('telescope.builtin').resume, { desc = '[G]rep [G]o back' })
 
 vim.keymap.set('n', '<leader>gp', require('telescope.builtin').builtin, { desc = '[G]rep command [P]allette' })
@@ -702,30 +699,6 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
-
--- require('nightfox').setup({
--- options = {
---   -- styles = { strings = "italic" }
--- },
--- palettes = {
---   dayfox = {},
---   --nightfox = { green = "#00ff00" }
--- },
---
--- groups = {
---   all = {
---     -- ["@field"] = { fg = "palette.black" },
---     -- LineNr = { fg = "palette.black" }
---   }
--- }
--- })
-
--- vim.cmd.colorscheme('nightfox')
-
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
-
--- vim.cmd.colorscheme('peachpuff')
 
 -- THIS PART IS TRYING TO WRITE CUSTOM LSP
 local client = vim.lsp.start_client {
