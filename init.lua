@@ -400,9 +400,9 @@ require('telescope').setup {
     },
   },
   extensions = {
-    recent_files = {
-      only_cwd = true
-    },
+    -- recent_files = {
+    --   only_cwd = true
+    -- },
     live_grep_args = {
       mappings = {
         i = {
@@ -416,7 +416,7 @@ require('telescope').setup {
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
 
-require('telescope').load_extension('recent_files')
+-- require('telescope').load_extension('recent_files')
 
 require('telescope').load_extension("live_grep_args")
 
