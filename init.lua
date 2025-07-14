@@ -421,14 +421,14 @@ require('telescope').load_extension('recent_files')
 require('telescope').load_extension("live_grep_args")
 
 -- See `:help telescope.builtin`
-vim.keymap.set('n', '<leader>b', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
-vim.keymap.set('n', '<leader>/', function()
+-- vim.keymap.set('n', '<leader>b', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
+-- vim.keymap.set('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
-  require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-    winblend = 10,
-    previewer = false,
-  })
-end, { desc = '[/] Fuzzily search in current buffer' })
+--   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+--     winblend = 10,
+--     previewer = false,
+--   })
+-- end, { desc = '[/] Fuzzily search in current buffer' })
 
 -- Map a shortcut to open the recent files picker.
 -- vim.api.nvim_set_keymap("n", "<Leader><Leader>",
@@ -701,36 +701,37 @@ cmp.setup {
 }
 
 -- THIS PART IS TRYING TO WRITE CUSTOM LSP
-local client = vim.lsp.start_client {
-  name = "mylsp",
-  cmd = {
-    "npx", "ts-node", vim.fn.expand("~/Work/lsp/server/src/server.ts")
-  },
-  capabilities = vim.lsp.protocol.make_client_capabilities()
-}
-
-if not client then
-  vim.notify("nope my lsp could not start")
-end
-
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "text",
-  callback = function()
-    vim.lsp.buf_attach_client(0, client)
-  end,
-})
+-- local client = vim.lsp.start_client {
+--   name = "mylsp",
+--   cmd = {
+--     "npx", "ts-node", vim.fn.expand("~/Work/lsp/server/src/server.ts")
+--   },
+--   capabilities = vim.lsp.protocol.make_client_capabilities()
+-- }
+--
+-- if not client then
+--   vim.notify("nope my lsp could not start")
+-- end
+--
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "text",
+--   callback = function()
+--     vim.lsp.buf_attach_client(0, client)
+--   end,
+-- })
 
 -- THIS PART IS TRYING TO WRITE CUSTOM TREE SITTER STUFF
-local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
-parser_configs["htl"] = {
-  install_info = {
-    url = "~/Work/tree-sitter-htl",
-    files = { "src/parser.c" }
-  },
-  filetype = "htl"
-}
+-- local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
+-- parser_configs["htl"] = {
+--   install_info = {
+--     url = "~/Work/tree-sitter-htl",
+--     files = { "src/parser.c" }
+--   },
+--   filetype = "htl"
+-- }
 
 -- configure nvim terminal
+local jobid
 vim.api.nvim_create_autocmd('TermOpen', {
   group = vim.api.nvim_create_augroup("custom-term-open", { clear = true }),
   callback = function()
@@ -746,6 +747,14 @@ local runjobinterm = function(thecmd)
     print("jobid is nil" .. jobid)
   end
 end
+
+-- key to open my custom terminal
+vim.keymap.set("n", "<leader>xt", function()
+ vim.cmd.new()
+ vim.cmd.term()
+ vim.api.nvim_win_set_height(0, 10)
+ jobid = vim.bo.channel
+end)
 
 -- key to run python main.py inside that little terminal
 vim.keymap.set("n", "<leader>xp", function()
