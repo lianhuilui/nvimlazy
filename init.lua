@@ -31,7 +31,7 @@ require('lazy').setup({
 
   -- Git related plugins
   'tpope/vim-fugitive',
---  'tpope/vim-rhubarb',
+  --  'tpope/vim-rhubarb',
 
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
@@ -91,7 +91,29 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',  opts = {} },
+  {
+    'folke/which-key.nvim',
+    opts = {
+      preset = 'helix', -- vertical style: (classic | modern | helix)
+      win = {
+        no_overlap = false,
+        wo = {
+          winblend = 60, -- value between 0-100. 0 = opaque. 100 = transparent.
+        },
+      },
+      -- triggers = {
+      --   { "<auto>", mode = "nxso" },
+      -- },
+      -- Start hidden and wait for a key to be pressed before showing the popup
+      -- Only used by enabled xo mapping modes.
+      -- @param ctx { mode: string, operator: string }
+      -- defer = function(ctx)
+      --   return false
+      --   -- return ctx.mode == "V" or ctx.mode == "<C-V>"
+      -- end,
+    },
+  },
+  --
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -123,33 +145,6 @@ require('lazy').setup({
     },
   },
 
-  -- {
-  --   -- Theme inspired by Atom
-  --   'navarasu/onedark.nvim',
-  --   priority = 1000,
-  --   config = function()
-  --     vim.cmd.colorscheme 'onedark'
-  --   end,
-  -- },
-
-  {
-    -- 'bluz71/vim-nightfly-colors',
-    -- priority = 1000,
-    -- config = function()
-    --   vim.cmd.colorscheme 'nightfly'
-    --   vim.api.nvim_set_hl(0, "Normal", {}) -- delete background color (to allow transparent terminal)
-    -- end,
-  },
-
-  -- {
-  --   "EdenEast/nightfox.nvim",
-  --   priority = 1000,
-  --   config = function()
-  --     vim.cmd.colorscheme 'carbonfox'
-  --     -- vim.api.nvim_set_hl(0, "Normal", {}) -- delete background color (to allow transparent terminal)
-  --   end,
-  -- },
-
   {
     "folke/tokyonight.nvim",
     lazy = false,
@@ -159,16 +154,6 @@ require('lazy').setup({
       vim.cmd.colorscheme 'tokyonight-night'
     end
   },
-
-
-  -- {
-  --   "EdenEast/nightfox.nvim",
-  --   -- priority = 1000
-  --   -- config = function()
-  --   -- vim.cmd.colorscheme 'nightfox'
-  --   -- vim.api.nvim_set_hl(0, "Normal", {}) -- delete background color (to allow transparent terminal)
-  --   -- end,
-  -- },
 
   {
     -- Set lualine as statusline
@@ -201,27 +186,8 @@ require('lazy').setup({
     },
   },
 
-  {
-    -- -- Add indentation guides even on blank lines
-    -- 'lukas-reineke/indent-blankline.nvim',
-    -- main = "ibl",
-    -- -- Enable `lukas-reineke/indent-blankline.nvim`
-    -- -- See `:help indent_blankline.txt`
-    -- opts = {},
-    -- config = function()
-    --   require("ibl").setup({
-    --     indent = {
-    --       char = "║"
-    --     },
-    --     scope = {
-    --       enabled = false
-    --     }
-    --   })
-    -- end
-  },
-
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  { 'numToStr/Comment.nvim',  opts = {} },
 
   -- Fuzzy Finder (files, lsp, etc)
   {
@@ -332,7 +298,7 @@ vim.o.scrolloff = 8
 
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
-vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
+---- what? vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
 vim.keymap.set('n', '<C-j>', ':cn<cr>', { desc = 'Next in QuickFix List' })
 vim.keymap.set('n', '<C-k>', ':cp<cr>', { desc = 'Prev in QuickFix List' })
@@ -423,7 +389,7 @@ require('telescope').load_extension("live_grep_args")
 -- See `:help telescope.builtin`
 -- vim.keymap.set('n', '<leader>b', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
 -- vim.keymap.set('n', '<leader>/', function()
-  -- You can pass additional configuration to telescope to change theme, layout, etc.
+-- You can pass additional configuration to telescope to change theme, layout, etc.
 --   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
 --     winblend = 10,
 --     previewer = false,
@@ -448,8 +414,8 @@ vim.keymap.set("n", "<leader>U", vim.cmd.UndotreeToggle, { desc = "Undo Tree Tog
 --vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 -- vim.keymap.set("n", "<leader>sg", require('telescope').extensions.live_grep_args.live_grep_args, { desc = '[S]earch by [Grep] (args)' }) -- use the more powerful one
 
-vim.keymap.set('n', '<leader>gD', require('telescope.builtin').diagnostics, { desc = '[G]rep [D]iagnostics' })
-vim.keymap.set('n', '<leader>gg', require('telescope.builtin').resume, { desc = '[G]rep [G]o back' })
+-- vim.keymap.set('n', '<leader>gD', require('telescope.builtin').diagnostics, { desc = '[G]rep [D]iagnostics' }) -- use <leader>sd instead
+-- vim.keymap.set('n', '<leader>gg', require('telescope.builtin').resume, { desc = '[G]rep [G]o back' }) -- use <leader>sr instead
 
 vim.keymap.set('n', '<leader>gp', require('telescope.builtin').builtin, { desc = '[G]rep command [P]allette' })
 
@@ -462,7 +428,7 @@ vim.keymap.set("n", "<leader>k", "<C-w>j", { desc = "Move Focus up" })
 vim.keymap.set("n", "<leader>i", "<C-w>k", { desc = "Move Focus down" })
 
 -- vim.keymap.set("n", "<leader>f", ":Neotree reveal<cr>", { desc = "[F]ocus file in Neotree" })
--- vim.keymap.set("n", "<leader>e", ":Neotree toggle<cr>", { desc = "Toggle File [E]xplorer" }) -- trying out Snacks.explorer 
+-- vim.keymap.set("n", "<leader>e", ":Neotree toggle<cr>", { desc = "Toggle File [E]xplorer" }) -- trying out Snacks.explorer
 
 -- split windows
 vim.keymap.set("n", "<leader>v", ":vnew<CR>", { desc = "New [V]ertical Pane" })
@@ -489,19 +455,12 @@ vim.keymap.set("i", "jw", "<esc>:w<CR>")
 vim.keymap.set("i", "jl", vim.cmd.w) -- write file without leaving insert mode
 
 -- Global formatting keymaps (safer version)
-vim.keymap.set("n", "<leader>==", function()
+vim.keymap.set("n", "gq", function()
   local clients = vim.lsp.get_clients({ bufnr = 0 })
   if #clients > 0 then
     vim.lsp.buf.format()
   end
 end, { desc = "Format entire buffer" })
-
-vim.keymap.set("v", "<leader>==", function()
-  local clients = vim.lsp.get_clients({ bufnr = 0 })
-  if #clients > 0 then
-    vim.lsp.buf.format({ range = true })
-  end
-end, { desc = "Format selection" })
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
@@ -528,10 +487,10 @@ require('nvim-treesitter.configs').setup {
   incremental_selection = {
     enable = true,
     keymaps = {
-      init_selection = '<c-space>',
+      init_selection = '<c-space>', -- control space
       node_incremental = '<c-space>',
       scope_incremental = '<c-s>',
-      node_decremental = '<M-space>',
+      node_decremental = '<M-space>', -- option space
     },
   },
   textobjects = {
@@ -581,10 +540,20 @@ require('nvim-treesitter.configs').setup {
 }
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
+vim.keymap.set('n', '[d', function() vim.diagnostic.goto_prev({ float = false }) end,
+  { desc = 'Go to previous diagnostic message' })
+vim.keymap.set('n', ']d', function() vim.diagnostic.goto_next({ float = false }) end,
+  { desc = 'Go to next diagnostic message' })
 vim.keymap.set('n', '<leader>D', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>Q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
+
+vim.diagnostic.config({
+  -- virtual_text = {
+  --   virt_text_win_col = 80,
+  --   virt_text_hide = true
+  -- },
+  virtual_lines = true
+})
 
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
@@ -648,57 +617,61 @@ local on_attach = function(_, bufnr)
   end, { buffer = bufnr, desc = '[F]ormat selection' })
 end
 
--- nvim-cmp supports additional completion capabilities, so broadcast that to servers
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+local hot = true
 
--- [[ Configure nvim-cmp ]]
--- See `:help cmp`
-local cmp = require 'cmp'
-local luasnip = require 'luasnip'
-require('luasnip.loaders.from_vscode').lazy_load()
-luasnip.config.setup {}
+local cold = false
 
-cmp.setup {
-  snippet = {
-    expand = function(args)
-      luasnip.lsp_expand(args.body)
-    end,
-  },
-  mapping = cmp.mapping.preset.insert {
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete {},
-    ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
-    },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.locally_jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-  },
-  sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-  },
-}
+-- -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
+-- local capabilities = vim.lsp.protocol.make_client_capabilities()
+-- capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
+-- -- [[ Configure nvim-cmp ]]
+-- -- See `:help cmp`
+-- local cmp = require 'cmp'
+-- local luasnip = require 'luasnip'
+-- require('luasnip.loaders.from_vscode').lazy_load()
+-- luasnip.config.setup {}
+
+-- cmp.setup {
+--   snippet = {
+--     expand = function(args)
+--       luasnip.lsp_expand(args.body)
+--     end,
+--   },
+--   mapping = cmp.mapping.preset.insert {
+--     ['<C-n>'] = cmp.mapping.select_next_item(),
+--     ['<C-p>'] = cmp.mapping.select_prev_item(),
+--     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+--     ['<C-f>'] = cmp.mapping.scroll_docs(4),
+--     ['<C-Space>'] = cmp.mapping.complete {},
+--     ['<CR>'] = cmp.mapping.confirm {
+--       behavior = cmp.ConfirmBehavior.Replace,
+--       select = true,
+--     },
+--     ['<Tab>'] = cmp.mapping(function(fallback)
+--       if cmp.visible() then
+--         cmp.select_next_item()
+--       elseif luasnip.expand_or_locally_jumpable() then
+--         luasnip.expand_or_jump()
+--       else
+--         fallback()
+--       end
+--     end, { 'i', 's' }),
+--     ['<S-Tab>'] = cmp.mapping(function(fallback)
+--       if cmp.visible() then
+--         cmp.select_prev_item()
+--       elseif luasnip.locally_jumpable(-1) then
+--         luasnip.jump(-1)
+--       else
+--         fallback()
+--       end
+--     end, { 'i', 's' }),
+--   },
+--   sources = {
+--     { name = 'nvim_lsp' },
+--     { name = 'luasnip' },
+--   },
+-- }
 
 -- THIS PART IS TRYING TO WRITE CUSTOM LSP
 -- local client = vim.lsp.start_client {
@@ -750,10 +723,10 @@ end
 
 -- key to open my custom terminal
 vim.keymap.set("n", "<leader>xt", function()
- vim.cmd.new()
- vim.cmd.term()
- vim.api.nvim_win_set_height(0, 10)
- jobid = vim.bo.channel
+  vim.cmd.new()
+  vim.cmd.term()
+  vim.api.nvim_win_set_height(0, 10)
+  jobid = vim.bo.channel
 end)
 
 -- key to run python main.py inside that little terminal
@@ -768,3 +741,314 @@ end)
 vim.keymap.set("n", "<leader>xm", function()
   runjobinterm("yarn --cwd src/ClientSide dev")
 end)
+
+local function printFn(text)
+  local _printFn = nil
+  if Snacks.notify ~= nil then _printFn = Snacks.notify else _printFn = vim.print end
+
+  _printFn(text)
+end
+
+vim.api.nvim_create_autocmd({ 'BufEnter' },
+  {
+    pattern = "*.lua",
+    callback = function()
+      local buffer = vim.api.nvim_get_current_buf()
+      local cmd = function()
+        printFn("My Command is running!")
+
+        local maps = vim.api.nvim_get_keymap('n')
+
+        local text = ''
+        for _, v in ipairs(maps) do
+          local desc = ""
+
+          if v.desc then
+            desc = " > " .. v.desc
+          end
+
+          -- mode: V
+          -- <Tab> > vim.snippet.jump if active, otherwise <Tab>
+          --  gB > Git Browse
+          -- # > :help v_#-default
+          -- %
+          -- * > :help v_star-default
+          -- @ > :help v_@-default
+          -- Q > :help v_Q-default
+          -- S > Leap backward
+          -- [%
+          -- ]%
+          -- a%
+          -- g%
+          -- gb > Comment toggle blockwise (visual)
+          -- gs > Leap from window
+          -- gra > vim.lsp.buf.code_action()
+          -- gc > Comment toggle linewise (visual)
+          -- gx > Opens filepath or URI under cursor with the system handler (file explorer, web browser, …)
+          -- s > Leap forward
+          -- <Plug>(MatchitVisualTextObject)
+          -- <Plug>(MatchitVisualMultiForward)
+          -- <Plug>(MatchitVisualMultiBackward)
+          -- <Plug>(MatchitVisualBackward)
+          -- <Plug>(MatchitVisualForward)
+          -- <Plug>(comment_toggle_blockwise_visual) > Comment toggle blockwise (visual)
+          -- <Plug>(comment_toggle_linewise_visual) > Comment toggle linewise (visual)
+          -- <Plug>luasnip-jump-prev > LuaSnip: Jump to the previous node
+          -- <Plug>luasnip-jump-next > LuaSnip: Jump to the next node
+          -- <Plug>luasnip-prev-choice > LuaSnip: Change to the previous choice from the choiceNode
+          -- <Plug>luasnip-next-choice > LuaSnip: Change to the next choice from the choiceNode
+          -- <Plug>luasnip-expand-snippet > LuaSnip: Expand the current snippet
+          -- <Plug>luasnip-expand-or-jump > LuaSnip: Expand or jump in the current snippet
+          -- <Plug>luasnip-expand-repeat > LuaSnip: Repeat last node expansion
+          -- <Plug>(leap-backward-x)
+          -- <Plug>(leap-forward-x)
+          -- <Plug>(leap-cross-window)
+          -- <Plug>(leap-backward-to)
+          -- <Plug>(leap-forward-to)
+          -- <Plug>(leap-backward-till)
+          -- <Plug>(leap-backward)
+          -- <Plug>(leap-forward-till)
+          -- <Plug>(leap-forward)
+          -- <Plug>(leap-anywhere)
+          -- <Plug>(leap-from-window)
+          -- <Plug>(leap)
+          -- <S-Tab> > vim.snippet.jump if active, otherwise <S-Tab>
+          -- <C-S> > vim.lsp.buf.signature_help()
+
+          -- mode: N
+          --  uS > Toggle Sign Column
+          --  uf > Toggle Dimming
+          --  ui > Toggle Indent Guides
+          --  uh > Toggle Inlay Hints
+          --  ub > Toggle Dark Background
+          --  uT > Toggle Treesitter Highlight
+          --  uc > Toggle conceallevel
+          --  ul > Toggle Line Numbers
+          --  ud > Toggle Diagnostics
+          --  uL > Toggle Relative Number
+          --  uw > Toggle Wrap
+          --  us > Toggle Spelling
+          --  ws > [W]indow [S]wap - Move current buffer to picked window
+          --  wp > [W]indow [P]icker - Pick window
+          --  xm
+          --  xj
+          --  xp
+          --  xt
+          --  Q > Open diagnostics list
+          --  D > Open floating diagnostic message
+          --  q > [Q]uit window
+          --  o > Close all [O]ther windows
+          --  w > [W]rite file
+          --  H > [H]orizontal Split
+          --  V > [V]ertical Split
+          --  h > New [H]orizontal Pane
+          --  v > New [V]ertical Pane
+          --  i > Move Focus down
+          --  k > Move Focus up
+          --  l > Move Focus right
+          --  j > Move Focus left
+          --  gp > [G]rep command [P]allette
+          --  U > Undo Tree Toggle
+          --  cs > List [C]olor [S]cheme
+          --  4 > Harpooned File [4]
+          --  3 > Harpooned File [3]
+          --  2 > Harpooned File [2]
+          --  1 > Harpooned File [1]
+          --  0 > Harpooned List
+          --  ` > Append to Harpoon
+          --    > Recent Files
+          --  e > Mini Files Explorer
+          --  E > File Explorer
+          --  t > Toggle Terminal
+          --  sF > Find files (only in git)
+          --  sf > Find files
+          --  gB > Git Browse
+          --  g* > Lsp References
+          --  ? > Help Pages
+          --  sw > Visual Selection or word
+          --  sg > Grep
+          --  sk > Key maps
+          --  sm > Marks
+          --  sd > Diagnostics
+          --  cp > Commands
+          --  ch > Command History
+          --  b > Buffer Lines
+          --  / > Buffer Lines
+          --  sa > Autocmds
+          --  s/ > Search History
+          --  sn > Notification History
+          --  sr > Resume last search
+          --  s" > Registers
+          --  gd > Git Diff (Hunks)
+          --  gs > Git Status
+          --  gL > Git Log Line
+          --  gl > Git Log
+          --  z > Toggle Zen Mode
+          --  lg > Open lazygit
+          -- %
+          -- & > :help &-default
+          -- S > Leap backward
+          -- Y > :help Y-default
+          -- [%
+          -- [  > Add empty line above cursor
+          -- [B > :brewind
+          -- [b > :bprevious
+          -- [<C-T> >  :ptprevious
+          -- [T > :trewind
+          -- [t > :tprevious
+          -- [A > :rewind
+          -- [a > :previous
+          -- [<C-L> > :lpfile
+          -- [L > :lrewind
+          -- [l > :lprevious
+          -- [<C-Q> > :cpfile
+          -- [Q > :crewind
+          -- [q > :cprevious
+          -- [D > Jump to the first diagnostic in the current buffer
+          -- [d > Go to previous diagnostic message
+          -- ]%
+          -- ]  > Add empty line below cursor
+          -- ]B > :blast
+          -- ]b > :bnext
+          -- ]<C-T> > :ptnext
+          -- ]T > :tlast
+          -- ]t > :tnext
+          -- ]A > :last
+          -- ]a > :next
+          -- ]<C-L> > :lnfile
+          -- ]L > :llast
+          -- ]l > :lnext
+          -- ]<C-Q> > :cnfile
+          -- ]Q > :clast
+          -- ]q > :cnext
+          -- ]D > Jump to the last diagnostic in the current buffer
+          -- ]d > Go to next diagnostic message
+          -- gq > Format entire buffer
+          -- g%
+          -- gs > Leap from window
+          -- gcA > Comment insert end of line
+          -- gcO > Comment insert above
+          -- gco > Comment insert below
+          -- gbc > Comment toggle current block
+          -- gb > Comment toggle blockwise
+          -- g[ > Prev Reference
+          -- g] > Next Reference
+          -- gO > vim.lsp.buf.document_symbol()
+          -- gri > vim.lsp.buf.implementation()
+          -- grr > vim.lsp.buf.references()
+          -- gra > vim.lsp.buf.code_action()
+          -- grn > vim.lsp.buf.rename()
+          -- gcc > Comment toggle current line
+          -- gc > Comment toggle linewise
+          -- gx > Opens filepath or URI under cursor with the system handler (file explorer, web browser, …)
+          -- j
+          -- k
+          -- s > Leap forward
+          -- y<C-G>
+          -- <Plug>BlinkCmpDotRepeatHack
+          -- <C-K> > Prev in QuickFix List
+          -- <C-J> > Next in QuickFix List
+          -- <Plug>(MatchitNormalMultiForward)
+          -- <Plug>(MatchitNormalMultiBackward)
+          -- <Plug>(MatchitNormalBackward)
+          -- <Plug>(MatchitNormalForward)
+          -- <Plug>(leap-backward-x)
+          -- <Plug>(leap-forward-x)
+          -- <Plug>(leap-cross-window)
+          -- <Plug>(leap-backward-to)
+          -- <Plug>(leap-forward-to)
+          -- <Plug>(leap-backward-till)
+          -- <Plug>(leap-backward)
+          -- <Plug>(leap-forward-till)
+          -- <Plug>(leap-forward)
+          -- <Plug>(leap-anywhere)
+          -- <Plug>(leap-from-window)
+          -- <Plug>(leap)
+          -- <C-0> > Next Harpooned File
+          -- <C-9> > Previous Harpooned File
+          -- <Plug>fugitive:
+          -- <Plug>fugitive:y<C-G>
+          -- <Plug>PlenaryTestFile
+          -- <Plug>(comment_toggle_blockwise_count) > Comment toggle blockwise with count
+          -- <Plug>(comment_toggle_linewise_count) > Comment toggle linewise with count
+          -- <Plug>(comment_toggle_blockwise_current) > Comment toggle current block
+          -- <Plug>(comment_toggle_linewise_current) > Comment toggle current line
+          -- <Plug>(comment_toggle_blockwise) > Comment toggle blockwise
+          -- <Plug>(comment_toggle_linewise) > Comment toggle linewise
+          -- <Plug>luasnip-expand-repeat > LuaSnip: Repeat last node expansion
+          -- <Plug>luasnip-delete-check > LuaSnip: Removes current snippet from jumplist
+          -- <C-W><C-D> > Show diagnostics under the cursor
+          -- <C-W>d > Show diagnostics under the cursor
+          -- <C-L> > :help CTRL-L-default
+
+          text = text .. v.lhs .. desc .. "\n"
+        end
+        printFn(text)
+
+        -- vim.api.nvim_set_current_line(vim.api.nvim_get_current_line() .. " -- Heyyyyyyyy, brotherrrrrrr")
+      end
+
+      local opts = {}
+
+      vim.api.nvim_buf_create_user_command(buffer, "MyCommand", cmd, opts)
+
+      printFn("Hello, I have created MyCommand.\nPress <leader>xx to trigger")
+
+      vim.keymap.set({ 'n' }, '<leader>xx', function()
+        vim.cmd.MyCommand()
+      end) -- when i press x, it should run the command
+
+      -- /Users/heinzawoo/.config/nvim
+      -- /Users/heinzawoo/.local/share/nvim/site
+      -- /Users/heinzawoo/.local/share/nvim/lazy/lazy.nvim
+      -- /Users/heinzawoo/.local/share/nvim/lazy/nvim-colorizer.lua
+      -- /Users/heinzawoo/.local/share/nvim/lazy/window-picker
+      -- /Users/heinzawoo/.local/share/nvim/lazy/telescope-live-grep-args.nvim
+      -- /Users/heinzawoo/.local/share/nvim/lazy/telescope-fzf-native.nvim
+      -- /Users/heinzawoo/.local/share/nvim/lazy/telescope.nvim
+      -- /Users/heinzawoo/.local/share/nvim/lazy/nvim-ts-autotag
+      -- /Users/heinzawoo/.local/share/nvim/lazy/vim-sleuth
+      -- /Users/heinzawoo/.local/share/nvim/lazy/leap.nvim
+      -- /Users/heinzawoo/.local/share/nvim/lazy/vim-fugitive
+      -- /Users/heinzawoo/.local/share/nvim/lazy/Comment.nvim
+      -- /Users/heinzawoo/.local/share/nvim/lazy/nui.nvim
+      -- /Users/heinzawoo/.local/share/nvim/lazy/nvim-web-devicons
+      -- /Users/heinzawoo/.local/share/nvim/lazy/neo-tree.nvim
+      -- /Users/heinzawoo/.local/share/nvim/lazy/nvim-nio
+      -- /Users/heinzawoo/.local/share/nvim/lazy/nvim-autopairs
+      -- /Users/heinzawoo/.local/share/nvim/lazy/cmp-nvim-lsp
+      -- /Users/heinzawoo/.local/share/nvim/lazy/cmp_luasnip
+      -- /Users/heinzawoo/.local/share/nvim/lazy/LuaSnip
+      -- /Users/heinzawoo/.local/share/nvim/lazy/nvim-cmp
+      -- /Users/heinzawoo/.local/share/nvim/lazy/fidget.nvim
+      -- /Users/heinzawoo/.local/share/nvim/lazy/mason-lspconfig.nvim
+      -- /Users/heinzawoo/.local/share/nvim/lazy/mason.nvim
+      -- /Users/heinzawoo/.local/share/nvim/lazy/nvim-lspconfig
+      -- /Users/heinzawoo/.local/share/nvim/lazy/undotree
+      -- /Users/heinzawoo/.local/share/nvim/lazy/lualine.nvim
+      -- /Users/heinzawoo/.local/share/nvim/lazy/nvim-treesitter-textobjects
+      -- /Users/heinzawoo/.local/share/nvim/lazy/nvim-treesitter
+      -- /Users/heinzawoo/.local/share/nvim/lazy/smear-cursor.nvim
+      -- /Users/heinzawoo/.local/share/nvim/lazy/plenary.nvim
+      -- /Users/heinzawoo/.local/share/nvim/lazy/harpoon
+      -- /Users/heinzawoo/.local/share/nvim/lazy/gitsigns.nvim
+      -- /Users/heinzawoo/.local/share/nvim/lazy/which-key.nvim
+      -- /Users/heinzawoo/.local/share/nvim/lazy/mini.nvim
+      -- /Users/heinzawoo/.local/share/nvim/lazy/friendly-snippets
+      -- /Users/heinzawoo/.local/share/nvim/lazy/blink.cmp
+      -- /Users/heinzawoo/.local/share/nvim/lazy/snacks.nvim
+      -- /Users/heinzawoo/.local/share/nvim/lazy/tokyonight.nvim
+      -- /Users/heinzawoo/.local/share/nvim/lazy/luarocks.nvim
+      -- /opt/homebrew/Cellar/neovim/0.11.2/share/nvim/runtime
+      -- /opt/homebrew/Cellar/neovim/0.11.2/share/nvim/runtime/pack/dist/opt/netrw
+      -- /opt/homebrew/Cellar/neovim/0.11.2/share/nvim/runtime/pack/dist/opt/matchit
+      -- /opt/homebrew/Cellar/neovim/0.11.2/lib/nvim
+      -- /Users/heinzawoo/.local/state/nvim/lazy/readme
+      -- /Users/heinzawoo/.local/share/nvim/lazy/cmp-nvim-lsp/after
+      -- /Users/heinzawoo/.local/share/nvim/lazy/cmp_luasnip/after
+      -- /Users/heinzawoo/.local/share/nvim/lazy/mason-lspconfig.nvim/after
+
+      --
+    end
+
+  })

@@ -84,7 +84,7 @@
 | `<leader>ca`       | Code Action                        |
 | `<leader>cf`       | Code Format                        |
 | `<leader>F`        | Format buffer                      |
-| `<leader>==`       | Format entire buffer               |
+| `gq`             | Format entire buffer               |
 | `<leader>D`        | Type Definition                    |
 | `<leader>ds`       | Document Symbols                   |
 | `<leader>Ws`       | Workspace Symbols                  |

@@ -14,8 +14,9 @@ local get_header = function(message)
     local cwd = vim.fn.getcwd()
     local default_message = "Welcome to " .. cwd .. "!"
     message = message or default_message
-    flags = ""
+    local flags = ""
     local handle = io.popen('cowsay ' .. flags .. ' ' .. '"' .. message:gsub('"', '\\"') .. '"')
+
     if handle then
         local result = handle:read("*a")
         handle:close()
@@ -70,7 +71,7 @@ return {
         explorer = { enabled = true },
 
         -- this plugin shows colors only for area where the cursor is, and grayscales the rest
-        dim = { enabled = false },
+        dim = { enabled = true },
 
         -- shows the vertical lines to show scope
         indent = { enabled = true },
@@ -101,7 +102,7 @@ return {
                 dim = false,
                 -- mini_diff_signs = false,
                 -- signcolumn = false,
-                -- diagnostics = false,
+                diagnostics = false,
                 -- inlay_hints = false,
             },
             show = {
@@ -128,11 +129,7 @@ return {
             --         list = false,
             --     },
             -- },
-            -- plugins to disable when zen mode is active
-            plugins = {
-                tmux = { enabled = false },
-                kitty = { enabled = false },
-            },
+            --
         },
     },
     keys = {
@@ -160,10 +157,11 @@ return {
         { "<leader>sd",      function() Snacks.picker.diagnostics() end,                          desc = "Diagnostics" },
         { "<leader>sm",      function() Snacks.picker.marks(vscode) end,                          desc = "Marks" },
         { "<leader>sk",      function() Snacks.picker.keymaps() end,                              desc = "Key maps" },
-        { "<leader>sg",      function() Snacks.picker.grep() end,                                 desc = "Grep" },
-        { "<leader>sw",      function() Snacks.picker.grep_word() end,                            desc = "Visual Selection or word" },
+        { "<leader>sg",      function() Snacks.picker.grep({ filter = { cwd = true } }) end,      desc = "Grep" },
+        { "<leader>sw",      function() Snacks.picker.grep_word({ filter = { cwd = true } }) end, desc = "Visual Selection or word" },
         { "<leader>?",       function() Snacks.picker.help() end,                                 desc = "Help Pages" },
         { "<leader><space>", function() Snacks.picker.recent({ filter = { cwd = true }, }) end,   desc = "Recent Files" },
+        { "<leader>g*",      function() Snacks.picker.lsp_references() end,                       desc = "Lsp References" },
 
         -- git browse
         { "<leader>gB",      function() Snacks.gitbrowse(gbopts) end,                             desc = "Git Browse",              mode = { "n", "v" } },
@@ -176,7 +174,11 @@ return {
         -- { "<c-_>",      function() Snacks.terminal() end,               desc = "which_key_ignore" },
 
         -- explorer
-        { "<leader>e",       function() Snacks.explorer() end,                                    desc = "File Explorer" },
+        { "<leader>E",       function() Snacks.explorer() end,                                    desc = "File Explorer" },
+        { "<leader>e",       function() _G.MiniFiles.open() end,                                  desc = "Mini Files Explorer" },
+
+        { "g]",              function() Snacks.words.jump(vim.v.count1) end,                      desc = "Next Reference",          mode = { "n", "t" } },
+        { "g[",              function() Snacks.words.jump(-vim.v.count1) end,                     desc = "Prev Reference",          mode = { "n", "t" } },
 
     },
 
